@@ -65,14 +65,14 @@ lazy val compat = MultiScalaCrossProject(JSPlatform, JVMPlatform, NativePlatform
       scalacOptions ++= Seq("-feature", "-language:higherKinds", "-language:implicitConversions"),
       Compile / unmanagedSourceDirectories += {
         val sharedSourceDir = (ThisBuild / baseDirectory).value / "compat/src/main"
-        if (scalaVersion.value.startsWith("2.13.") || isDotty.value) sharedSourceDir / "scala-2.13"
+        if (scalaVersion.value.startsWith("2.13.") || scalaVersion.value.startsWith("3")) sharedSourceDir / "scala-2.13"
         else sharedSourceDir / "scala-2.11_2.12"
       },
     )
     .jvmSettings(
       Test / unmanagedSourceDirectories += (ThisBuild / baseDirectory).value / "compat/src/test/scala-jvm",
       junit,
-      scalaModuleMimaPreviousVersion := Some("2.3.0").filterNot(_ => isDotty.value),
+      scalaModuleMimaPreviousVersion := Some("2.3.0").filterNot(_ => scalaVersion.value.startsWith("3")),
       mimaBinaryIssueFilters ++= {
         import com.typesafe.tools.mima.core._
         import com.typesafe.tools.mima.core.ProblemFilters._
@@ -83,7 +83,7 @@ lazy val compat = MultiScalaCrossProject(JSPlatform, JVMPlatform, NativePlatform
     )
     .jsSettings(
       scalacOptions ++= {
-        if (isDotty.value) Seq() // Scala.js does not support -P with Scala 3: lampepfl/dotty#9783
+        if (scalaVersion.value.startsWith("3")) Seq() // Scala.js does not support -P with Scala 3: lampepfl/dotty#9783
         else {
           val x = (LocalRootProject / baseDirectory).value.toURI.toString
           val y = "https://raw.githubusercontent.com/scala/scala-collection-compat/" + sys.process
