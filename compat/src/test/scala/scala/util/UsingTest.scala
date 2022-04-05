@@ -444,7 +444,7 @@ class UsingTest {
         Using(new ErrorResource) { _ =>
           throw new UsingException("nested `Using`")
         }.get
-      }
+      }: @unchecked
 
     // uncomment to debug actual suppression nesting
     //usingException.printStackTrace()
@@ -506,7 +506,7 @@ class UsingTest {
       val _r1 = m(new ExceptionResource)
       val _r2 = m(new ErrorResource)
       throw new UsingException("`Using.Manager`")
-    }
+    }: @unchecked
 
     // uncomment to debug actual suppression nesting
     //usingException.printStackTrace()
