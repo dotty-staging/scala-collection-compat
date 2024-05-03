@@ -62,7 +62,11 @@ lazy val compat = new MultiScalaCrossProject(
       name := "scala-collection-compat",
       moduleName := "scala-collection-compat",
       scalaModuleAutomaticModuleName := Some("scala.collection.compat"),
-      scalacOptions ++= Seq("-feature", "-language:higherKinds", "-language:implicitConversions"),
+      scalacOptions ++= Seq("-feature", "-language:implicitConversions"),
+      scalacOptions ++= {CrossVersion.partialVersion(scalaVersion.value) match {
+        case Some((2, _)) => Seq("-language:higherKinds")
+        case _            => Seq()
+      }},
       Compile / unmanagedSourceDirectories += {
         val sharedSourceDir = (ThisBuild / baseDirectory).value / "compat/src/main"
         CrossVersion.partialVersion(scalaVersion.value) match {
