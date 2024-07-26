@@ -15,7 +15,7 @@ package test.scala.collection
 import org.junit.Test
 
 import scala.collection.compat._
-import scala.collection.immutable.{HashMap, TreeMap, TreeSet}
+import scala.collection.immutable.{HashMap, TreeMap, TreeSet, Map}
 import scala.collection.mutable.{ArrayBuffer, Builder, ListBuffer}
 import scala.collection.{BitSet, SortedMap, SortedSet, immutable, mutable}
 
@@ -121,7 +121,7 @@ class BuildFromTest {
 
     val xs4                          = TreeMap((1, "1"), (2, "2"))
     val xs5                          = flatCollect(xs4) { case (2, v) => List((v, v)) }
-    val xs6: TreeMap[String, String] = xs5
+    val xs6: /*Tree*/Map[String, String] = xs5 // since implicit priority change in 3.6 will only infer a Map, not a TreeMap
 
     val xs7                          = HashMap((1, "1"), (2, "2"))
     val xs8                          = flatCollect(xs7) { case (2, v) => List((v, v)) }
@@ -145,8 +145,8 @@ class BuildFromTest {
     val (xs7, xs8) = mapSplit(xs6) {
       case (k, v) => Left((v, k)): Either[(String, Int), (Int, Boolean)]
     }
-    val xs9: TreeMap[String, Int]   = xs7
-    val xs10: TreeMap[Int, Boolean] = xs8
+    val xs9: /*Tree*/Map[String, Int]   = xs7 // since implicit priority change in 3.6 will only infer a Map, not a TreeMap
+    val xs10: /*Tree*/Map[Int, Boolean] = xs8 // since implicit priority change in 3.6 will only infer a Map, not a TreeMap
   }
 
   implicitly[BuildFrom[String, Char, String]]
