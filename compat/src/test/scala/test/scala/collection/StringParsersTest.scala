@@ -68,7 +68,7 @@ class StringParsersTest extends AssertThrown {
 
   val longNearOverflow = noLongOverflow.map(_.toString) ::: longOverUnderflow
 
-  val nullstring: String = null
+  val nullstring: String = null.asInstanceOf[String]
 
   // test cases taken from Apache Harmony: https://android.googlesource.com/platform/libcore/+/master/harmony-tests/src/test/java/org/apache/harmony/tests/java/lang/DoubleTest.java
   val doubleExamples = List(
